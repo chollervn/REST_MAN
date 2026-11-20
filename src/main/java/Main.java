@@ -39,7 +39,7 @@ public class Main {
                 project.resolve("src/main/webapp").toString());
         context.setParentClassLoader(Main.class.getClassLoader());
 
-        // Cho Tomcat quét @WebServlet, @WebFilter trong các lớp đã biên dịch.
+        // Nạp các lớp model và DAO đã biên dịch để các trang JSP sử dụng.
         // Các thư viện JDBC, JSP/JSTL được lấy từ classpath Maven của Main.
         StandardRoot resources = new StandardRoot(context);
         resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/classes",

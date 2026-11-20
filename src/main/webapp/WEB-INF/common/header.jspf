@@ -9,9 +9,9 @@
 <title><c:out value="${title}"/> · RestMan</title>
 <link rel="stylesheet" href="${ctx}/assets/style.css"></head>
 <body>
-<header class="topbar no-print"><a href="${ctx}/login">RestMan</a>
+<header class="topbar no-print"><a href="${ctx}/GDDangNhap3.jsp">RestMan</a>
 <c:if test="${not empty sessionScope.member}"><div class="account"><span><c:out value="${sessionScope.member.fullName}"/></span>
-<form method="post" action="${ctx}/logout"><input type="hidden" name="csrf" value="${sessionScope.csrf}"><button class="small">Đăng xuất</button></form></div></c:if>
+<form method="post" action="${ctx}/doDangXuat3.jsp"><input type="hidden" name="csrf" value="${sessionScope.csrf}"><button class="small">Đăng xuất</button></form></div></c:if>
 </header>
 <main class="panel">
 <c:if test="${not empty error}"><p class="error" role="alert"><c:out value="${error}"/></p></c:if>

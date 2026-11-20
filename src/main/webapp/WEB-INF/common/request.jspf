@@ -1,0 +1,74 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" buffer="64kb" errorPage="/GDLoi3.jsp" trimDirectiveWhitespaces="true" %>
+<%@ page import="dao.*,model.*,java.math.BigDecimal,java.time.LocalDate,java.util.UUID,java.net.URLEncoder,java.nio.charset.StandardCharsets,jakarta.servlet.http.*" %>
+<%!
+    private String text(HttpServletRequest request, String name) {
+        String value = request.getParameter(name);
+        return value == null ? "" : value.trim();
+    }
+
+    private String required(HttpServletRequest request, String name, String label, int max) {
+        String value = text(request, name);
+        if (value.isEmpty() || value.length() > max) {
+            throw new IllegalArgumentException(label + " phải có từ 1 đến " + max + " ký tự.");
+        }
+        return value;
+    }
+
+    private int positive(HttpServletRequest request, String name) {
+        try {
+            int number = Integer.parseInt(text(request, name));
+            if (number > 0) return number;
+        } catch (NumberFormatException ignored) {
+            // Dùng cùng thông báo cho số trống, số thập phân và số vượt giới hạn.
+        }
+        throw new IllegalArgumentException("Mã lựa chọn hoặc số lượng không hợp lệ. Số lượng phải là số nguyên dương.");
+    }
+
+    private String encode(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
+
+    private ImportIngredient3 draft(HttpSession session) {
+        ImportIngredient3 phieu = (ImportIngredient3) session.getAttribute("phieu");
+        if (phieu == null) throw new IllegalArgumentException("Hãy chọn nhà cung cấp trước khi nhập nguyên liệu.");
+        return phieu;
+    }
+
+    private void checkDraftToken(HttpServletRequest request, HttpSession session) {
+        Object token = session.getAttribute("draftToken");
+        if (token == null || !token.equals(request.getParameter("draftToken"))) {
+            throw new IllegalArgumentException("Phiếu trên trang này đã thay đổi. Hãy mở lại phiếu hiện tại.");
+        }
+    }
+%>
+<%
+    request.setCharacterEncoding("UTF-8");
+    response.setCharacterEncoding("UTF-8");
+    response.setHeader("Cache-Control", "no-store");
+    if (!"GET".equals(request.getMethod()) && !"HEAD".equals(request.getMethod())
+            && !"POST".equals(request.getMethod())) {
+        response.sendError(405);
+        return;
+    }
+    // Một session giữ một phiếu. Khóa này ngăn hai yêu cầu cùng sửa hoặc lưu phiếu.
+    synchronized (session) {
+        if (session.getAttribute("csrf") == null) session.setAttribute("csrf", UUID.randomUUID().toString());
+        if ("POST".equals(request.getMethod()) && !session.getAttribute("csrf").equals(request.getParameter("csrf"))) {
+            response.sendError(403, "Phiên làm việc đã thay đổi. Vui lòng tải lại trang.");
+            return;
+        }
+        Member3 member = (Member3) session.getAttribute("member");
+        if (!currentPage.equals("GDDangNhap3")) {
+            if (member == null) {
+                response.sendRedirect(request.getContextPath() + "/GDDangNhap3.jsp");
+                return;
+            }
+            boolean customerPage = currentPage.equals("GDChinhKH3") || currentPage.equals("GDTimMonAn3")
+                    || currentPage.equals("GDChiTietMonAn3");
+            if (!currentPage.equals("doDangXuat3") && ((customerPage && !(member instanceof Customer3))
+                    || (!customerPage && !(member instanceof WarehouseStaff3)))) {
+                response.sendError(403);
+                return;
+            }
+        }
+%>
