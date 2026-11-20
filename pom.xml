@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>vn.ptit</groupId><artifactId>PTTK</artifactId><version>1.0</version><packaging>war</packaging>
+  <properties><maven.compiler.release>21</maven.compiler.release><project.build.sourceEncoding>UTF-8</project.build.sourceEncoding><tomcat.version>10.1.61</tomcat.version></properties>
+  <dependencies>
+    <!-- Tomcat nhúng cung cấp Servlet API và bộ biên dịch JSP khi chạy Main. -->
+    <dependency><groupId>org.apache.tomcat.embed</groupId><artifactId>tomcat-embed-core</artifactId><version>${tomcat.version}</version></dependency>
+    <dependency><groupId>org.apache.tomcat.embed</groupId><artifactId>tomcat-embed-jasper</artifactId><version>${tomcat.version}</version></dependency>
+    <dependency><groupId>jakarta.servlet.jsp.jstl</groupId><artifactId>jakarta.servlet.jsp.jstl-api</artifactId><version>3.0.1</version>
+      <!-- Servlet và EL API đã có trong Tomcat, tránh nạp hai bản của cùng lớp. -->
+      <exclusions>
+        <exclusion><groupId>jakarta.servlet</groupId><artifactId>jakarta.servlet-api</artifactId></exclusion>
+        <exclusion><groupId>jakarta.el</groupId><artifactId>jakarta.el-api</artifactId></exclusion>
+      </exclusions>
+    </dependency>
+    <dependency><groupId>org.glassfish.web</groupId><artifactId>jakarta.servlet.jsp.jstl</artifactId><version>3.0.1</version></dependency>
+    <dependency><groupId>com.mysql</groupId><artifactId>mysql-connector-j</artifactId><version>9.2.0</version></dependency>
+  </dependencies>
+  <build><finalName>PTTK</finalName><plugins>
+    <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><version>3.13.0</version></plugin>
+    <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-war-plugin</artifactId><version>3.4.0</version>
+      <!-- Tomcat riêng đã có các thư viện này, không đóng gói chúng vào WAR. -->
+      <configuration><packagingExcludes>WEB-INF/lib/tomcat-embed-*.jar,WEB-INF/lib/tomcat-annotations-api-*.jar,WEB-INF/lib/ecj-*.jar</packagingExcludes></configuration>
+    </plugin>
+  </plugins></build>
+</project>

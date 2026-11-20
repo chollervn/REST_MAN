@@ -1,0 +1,17 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<fmt:setLocale value="vi_VN"/>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<!doctype html>
+<html lang="vi">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title><c:out value="${title}"/> · RestMan</title>
+<link rel="stylesheet" href="${ctx}/assets/style.css"></head>
+<body>
+<header class="topbar no-print"><a href="${ctx}/login">RestMan</a>
+<c:if test="${not empty sessionScope.member}"><div class="account"><span><c:out value="${sessionScope.member.fullName}"/></span>
+<form method="post" action="${ctx}/logout"><input type="hidden" name="csrf" value="${sessionScope.csrf}"><button class="small">Đăng xuất</button></form></div></c:if>
+</header>
+<main class="panel">
+<c:if test="${not empty error}"><p class="error" role="alert"><c:out value="${error}"/></p></c:if>

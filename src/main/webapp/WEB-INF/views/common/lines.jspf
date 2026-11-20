@@ -1,0 +1,4 @@
+<%@ page pageEncoding="UTF-8" %>
+<div class="table-wrap"><table><thead><tr><th>Nguyên liệu</th><th>SL</th><th>Đơn giá (đồng/đơn vị)</th><th>Thành tiền (VNĐ)</th></tr></thead><tbody>
+<c:forEach items="${phieu.importDetail}" var="line"><tr><td><c:out value="${line.ingredient.name}"/></td><td>${line.quantity}</td><td class="money"><fmt:formatNumber value="${line.unitCost}"/></td><td class="money"><fmt:formatNumber value="${line.thanhTien}"/></td></tr></c:forEach>
+</tbody></table></div>

@@ -1,0 +1,4 @@
+# Copy this file to local.properties and enter your own MySQL password.
+db.url=jdbc:mysql://localhost:3306/restman?connectionTimeZone=Asia/Bangkok&characterEncoding=UTF-8
+db.user=root
+db.password=YOUR_MYSQL_PASSWORD

@@ -1,0 +1,2 @@
+<input type="hidden" name="csrf" value="${sessionScope.csrf}">
+<input type="hidden" name="draftToken" value="${sessionScope.draftToken}">
